@@ -7,9 +7,13 @@ package modelo;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.Basic;
 import javax.persistence.CascadeType;
-import javax.persistence.EmbeddedId;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -28,44 +32,42 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Paciente.findAll", query = "SELECT p FROM Paciente p")
-    , @NamedQuery(name = "Paciente.findByIdpaciente", query = "SELECT p FROM Paciente p WHERE p.pacientePK.idpaciente = :idpaciente")
-    , @NamedQuery(name = "Paciente.findByIdusuario", query = "SELECT p FROM Paciente p WHERE p.pacientePK.idusuario = :idusuario")})
+    , @NamedQuery(name = "Paciente.findByIdpaciente", query = "SELECT p FROM Paciente p WHERE p.idpaciente = :idpaciente")})
 public class Paciente implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected PacientePK pacientePK;
-    @JoinColumn(name = "idusuario", referencedColumnName = "idusuario", insertable = false, updatable = false)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "idpaciente")
+    private Integer idpaciente;
+    @JoinColumn(name = "idusuario", referencedColumnName = "idusuario")
     @ManyToOne(optional = false)
-    private Usuario usuario;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "paciente")
+    private Usuario idusuario;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idpaciente")
     private List<Cita> citaList;
 
     public Paciente() {
     }
 
-    public Paciente(PacientePK pacientePK) {
-        this.pacientePK = pacientePK;
+    public Paciente(Integer idpaciente) {
+        this.idpaciente = idpaciente;
     }
 
-    public Paciente(int idpaciente, int idusuario) {
-        this.pacientePK = new PacientePK(idpaciente, idusuario);
+    public Integer getIdpaciente() {
+        return idpaciente;
     }
 
-    public PacientePK getPacientePK() {
-        return pacientePK;
+    public void setIdpaciente(Integer idpaciente) {
+        this.idpaciente = idpaciente;
     }
 
-    public void setPacientePK(PacientePK pacientePK) {
-        this.pacientePK = pacientePK;
+    public Usuario getIdusuario() {
+        return idusuario;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public void setIdusuario(Usuario idusuario) {
+        this.idusuario = idusuario;
     }
 
     @XmlTransient
@@ -80,7 +82,7 @@ public class Paciente implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (pacientePK != null ? pacientePK.hashCode() : 0);
+        hash += (idpaciente != null ? idpaciente.hashCode() : 0);
         return hash;
     }
 
@@ -91,7 +93,7 @@ public class Paciente implements Serializable {
             return false;
         }
         Paciente other = (Paciente) object;
-        if ((this.pacientePK == null && other.pacientePK != null) || (this.pacientePK != null && !this.pacientePK.equals(other.pacientePK))) {
+        if ((this.idpaciente == null && other.idpaciente != null) || (this.idpaciente != null && !this.idpaciente.equals(other.idpaciente))) {
             return false;
         }
         return true;
@@ -99,7 +101,7 @@ public class Paciente implements Serializable {
 
     @Override
     public String toString() {
-        return "modelo.Paciente[ pacientePK=" + pacientePK + " ]";
+        return "modelo.Paciente[ idpaciente=" + idpaciente + " ]";
     }
     
 }

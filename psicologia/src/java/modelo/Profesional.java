@@ -7,10 +7,13 @@ package modelo;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -32,15 +35,17 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Profesional.findAll", query = "SELECT p FROM Profesional p")
-    , @NamedQuery(name = "Profesional.findByIdprofesional", query = "SELECT p FROM Profesional p WHERE p.profesionalPK.idprofesional = :idprofesional")
-    , @NamedQuery(name = "Profesional.findByIdusuario", query = "SELECT p FROM Profesional p WHERE p.profesionalPK.idusuario = :idusuario")
+    , @NamedQuery(name = "Profesional.findByIdprofesional", query = "SELECT p FROM Profesional p WHERE p.idprofesional = :idprofesional")
     , @NamedQuery(name = "Profesional.findByNacionalidad", query = "SELECT p FROM Profesional p WHERE p.nacionalidad = :nacionalidad")
     , @NamedQuery(name = "Profesional.findByDescripcionPerfil", query = "SELECT p FROM Profesional p WHERE p.descripcionPerfil = :descripcionPerfil")})
 public class Profesional implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected ProfesionalPK profesionalPK;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "idprofesional")
+    private Integer idprofesional;
     @Size(max = 20)
     @Column(name = "nacionalidad")
     private String nacionalidad;
@@ -56,29 +61,25 @@ public class Profesional implements Serializable {
     private List<Especialidad> especialidadList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idprofesional")
     private List<Profesionalservicios> profesionalserviciosList;
-    @JoinColumn(name = "idusuario", referencedColumnName = "idusuario", insertable = false, updatable = false)
+    @JoinColumn(name = "idusuario", referencedColumnName = "idusuario")
     @ManyToOne(optional = false)
-    private Usuario usuario;
+    private Usuario idusuario;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idprofesional")
     private List<Horariodisponible> horariodisponibleList;
 
     public Profesional() {
     }
 
-    public Profesional(ProfesionalPK profesionalPK) {
-        this.profesionalPK = profesionalPK;
+    public Profesional(Integer idprofesional) {
+        this.idprofesional = idprofesional;
     }
 
-    public Profesional(int idprofesional, int idusuario) {
-        this.profesionalPK = new ProfesionalPK(idprofesional, idusuario);
+    public Integer getIdprofesional() {
+        return idprofesional;
     }
 
-    public ProfesionalPK getProfesionalPK() {
-        return profesionalPK;
-    }
-
-    public void setProfesionalPK(ProfesionalPK profesionalPK) {
-        this.profesionalPK = profesionalPK;
+    public void setIdprofesional(Integer idprofesional) {
+        this.idprofesional = idprofesional;
     }
 
     public String getNacionalidad() {
@@ -124,12 +125,12 @@ public class Profesional implements Serializable {
         this.profesionalserviciosList = profesionalserviciosList;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
+    public Usuario getIdusuario() {
+        return idusuario;
     }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public void setIdusuario(Usuario idusuario) {
+        this.idusuario = idusuario;
     }
 
     @XmlTransient
@@ -144,7 +145,7 @@ public class Profesional implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (profesionalPK != null ? profesionalPK.hashCode() : 0);
+        hash += (idprofesional != null ? idprofesional.hashCode() : 0);
         return hash;
     }
 
@@ -155,7 +156,7 @@ public class Profesional implements Serializable {
             return false;
         }
         Profesional other = (Profesional) object;
-        if ((this.profesionalPK == null && other.profesionalPK != null) || (this.profesionalPK != null && !this.profesionalPK.equals(other.profesionalPK))) {
+        if ((this.idprofesional == null && other.idprofesional != null) || (this.idprofesional != null && !this.idprofesional.equals(other.idprofesional))) {
             return false;
         }
         return true;
@@ -163,7 +164,7 @@ public class Profesional implements Serializable {
 
     @Override
     public String toString() {
-        return "modelo.Profesional[ profesionalPK=" + profesionalPK + " ]";
+        return "modelo.Profesional[ idprofesional=" + idprofesional + " ]";
     }
     
 }

@@ -7,9 +7,12 @@ package modelo;
 
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -29,16 +32,18 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Pagos.findAll", query = "SELECT p FROM Pagos p")
-    , @NamedQuery(name = "Pagos.findByIdpago", query = "SELECT p FROM Pagos p WHERE p.pagosPK.idpago = :idpago")
-    , @NamedQuery(name = "Pagos.findByIdcita", query = "SELECT p FROM Pagos p WHERE p.pagosPK.idcita = :idcita")
+    , @NamedQuery(name = "Pagos.findByIdpago", query = "SELECT p FROM Pagos p WHERE p.idpago = :idpago")
     , @NamedQuery(name = "Pagos.findByEstadopago", query = "SELECT p FROM Pagos p WHERE p.estadopago = :estadopago")
     , @NamedQuery(name = "Pagos.findByFechapago", query = "SELECT p FROM Pagos p WHERE p.fechapago = :fechapago")
     , @NamedQuery(name = "Pagos.findByMediodepago", query = "SELECT p FROM Pagos p WHERE p.mediodepago = :mediodepago")})
 public class Pagos implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected PagosPK pagosPK;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "idpago")
+    private Integer idpago;
     @Size(max = 20)
     @Column(name = "estadopago")
     private String estadopago;
@@ -48,27 +53,23 @@ public class Pagos implements Serializable {
     @Size(max = 20)
     @Column(name = "mediodepago")
     private String mediodepago;
-    @JoinColumn(name = "idcita", referencedColumnName = "idcita", insertable = false, updatable = false)
+    @JoinColumn(name = "idcita", referencedColumnName = "idcita")
     @ManyToOne(optional = false)
-    private Cita cita;
+    private Cita idcita;
 
     public Pagos() {
     }
 
-    public Pagos(PagosPK pagosPK) {
-        this.pagosPK = pagosPK;
+    public Pagos(Integer idpago) {
+        this.idpago = idpago;
     }
 
-    public Pagos(int idpago, int idcita) {
-        this.pagosPK = new PagosPK(idpago, idcita);
+    public Integer getIdpago() {
+        return idpago;
     }
 
-    public PagosPK getPagosPK() {
-        return pagosPK;
-    }
-
-    public void setPagosPK(PagosPK pagosPK) {
-        this.pagosPK = pagosPK;
+    public void setIdpago(Integer idpago) {
+        this.idpago = idpago;
     }
 
     public String getEstadopago() {
@@ -95,18 +96,18 @@ public class Pagos implements Serializable {
         this.mediodepago = mediodepago;
     }
 
-    public Cita getCita() {
-        return cita;
+    public Cita getIdcita() {
+        return idcita;
     }
 
-    public void setCita(Cita cita) {
-        this.cita = cita;
+    public void setIdcita(Cita idcita) {
+        this.idcita = idcita;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (pagosPK != null ? pagosPK.hashCode() : 0);
+        hash += (idpago != null ? idpago.hashCode() : 0);
         return hash;
     }
 
@@ -117,7 +118,7 @@ public class Pagos implements Serializable {
             return false;
         }
         Pagos other = (Pagos) object;
-        if ((this.pagosPK == null && other.pagosPK != null) || (this.pagosPK != null && !this.pagosPK.equals(other.pagosPK))) {
+        if ((this.idpago == null && other.idpago != null) || (this.idpago != null && !this.idpago.equals(other.idpago))) {
             return false;
         }
         return true;
@@ -125,7 +126,7 @@ public class Pagos implements Serializable {
 
     @Override
     public String toString() {
-        return "modelo.Pagos[ pagosPK=" + pagosPK + " ]";
+        return "modelo.Pagos[ idpago=" + idpago + " ]";
     }
     
 }

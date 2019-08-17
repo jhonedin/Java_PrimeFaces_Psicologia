@@ -80,9 +80,9 @@ public class Usuario implements Serializable {
     @Size(max = 20)
     @Column(name = "tipodocumento")
     private String tipodocumento;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idusuario")
     private List<Paciente> pacienteList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idusuario")
     private List<Profesional> profesionalList;
 
     public Usuario() {

@@ -7,9 +7,12 @@ package modelo;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -29,40 +32,38 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Historia.findAll", query = "SELECT h FROM Historia h")
-    , @NamedQuery(name = "Historia.findByIdhistoria", query = "SELECT h FROM Historia h WHERE h.historiaPK.idhistoria = :idhistoria")
-    , @NamedQuery(name = "Historia.findByIdcita", query = "SELECT h FROM Historia h WHERE h.historiaPK.idcita = :idcita")
+    , @NamedQuery(name = "Historia.findByIdhistoria", query = "SELECT h FROM Historia h WHERE h.idhistoria = :idhistoria")
     , @NamedQuery(name = "Historia.findByDescripcion", query = "SELECT h FROM Historia h WHERE h.descripcion = :descripcion")})
 public class Historia implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected HistoriaPK historiaPK;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "idhistoria")
+    private Integer idhistoria;
     @Size(max = 100)
     @Column(name = "descripcion")
     private String descripcion;
     @ManyToMany(mappedBy = "historiaList")
     private List<Tratamientos> tratamientosList;
-    @JoinColumn(name = "idcita", referencedColumnName = "idcita", insertable = false, updatable = false)
+    @JoinColumn(name = "idcita", referencedColumnName = "idcita")
     @ManyToOne(optional = false)
-    private Cita cita;
+    private Cita idcita;
 
     public Historia() {
     }
 
-    public Historia(HistoriaPK historiaPK) {
-        this.historiaPK = historiaPK;
+    public Historia(Integer idhistoria) {
+        this.idhistoria = idhistoria;
     }
 
-    public Historia(int idhistoria, int idcita) {
-        this.historiaPK = new HistoriaPK(idhistoria, idcita);
+    public Integer getIdhistoria() {
+        return idhistoria;
     }
 
-    public HistoriaPK getHistoriaPK() {
-        return historiaPK;
-    }
-
-    public void setHistoriaPK(HistoriaPK historiaPK) {
-        this.historiaPK = historiaPK;
+    public void setIdhistoria(Integer idhistoria) {
+        this.idhistoria = idhistoria;
     }
 
     public String getDescripcion() {
@@ -82,18 +83,18 @@ public class Historia implements Serializable {
         this.tratamientosList = tratamientosList;
     }
 
-    public Cita getCita() {
-        return cita;
+    public Cita getIdcita() {
+        return idcita;
     }
 
-    public void setCita(Cita cita) {
-        this.cita = cita;
+    public void setIdcita(Cita idcita) {
+        this.idcita = idcita;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (historiaPK != null ? historiaPK.hashCode() : 0);
+        hash += (idhistoria != null ? idhistoria.hashCode() : 0);
         return hash;
     }
 
@@ -104,7 +105,7 @@ public class Historia implements Serializable {
             return false;
         }
         Historia other = (Historia) object;
-        if ((this.historiaPK == null && other.historiaPK != null) || (this.historiaPK != null && !this.historiaPK.equals(other.historiaPK))) {
+        if ((this.idhistoria == null && other.idhistoria != null) || (this.idhistoria != null && !this.idhistoria.equals(other.idhistoria))) {
             return false;
         }
         return true;
@@ -112,7 +113,7 @@ public class Historia implements Serializable {
 
     @Override
     public String toString() {
-        return "modelo.Historia[ historiaPK=" + historiaPK + " ]";
+        return "modelo.Historia[ idhistoria=" + idhistoria + " ]";
     }
     
 }
