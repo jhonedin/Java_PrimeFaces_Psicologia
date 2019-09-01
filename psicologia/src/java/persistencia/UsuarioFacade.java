@@ -7,12 +7,14 @@ package persistencia;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import modelo.Usuario;
 
 /**
  *
- * @author CRISTHIAN
+ * @author Jhon
  */
 @Stateless
 public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFacadeLocal {
@@ -27,6 +29,18 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
 
     public UsuarioFacade() {
         super(Usuario.class);
+    }
+    
+    @Override
+    public Usuario findxCorreo(String correo) {
+        String consulta = "select u from Usuario u where u.correo='"+correo+"'";
+        try{
+            Query query =  em.createQuery(consulta);
+            return (Usuario) query.getSingleResult();
+            
+        }catch(NoResultException e){
+            return null;
+        }
     }
     
 }

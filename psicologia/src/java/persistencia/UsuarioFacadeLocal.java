@@ -11,7 +11,7 @@ import modelo.Usuario;
 
 /**
  *
- * @author CRISTHIAN
+ * @author Jhon
  */
 @Local
 public interface UsuarioFacadeLocal {
@@ -23,6 +23,8 @@ public interface UsuarioFacadeLocal {
     void remove(Usuario usuario);
 
     Usuario find(Object id);
+    
+    Usuario findxCorreo (String correo);
 
     List<Usuario> findAll();
 
