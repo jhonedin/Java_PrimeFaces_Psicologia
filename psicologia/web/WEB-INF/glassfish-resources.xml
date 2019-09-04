@@ -6,8 +6,8 @@
         <property name="portNumber" value="3306"/>
         <property name="databaseName" value="psicologiabd"/>
         <property name="User" value="root"/>
-        <property name="Password" value="jhon"/>
-        <property name="URL" value="jdbc:mysql://localhost:3306/psicologiabd?zeroDateTimeBehavior=convertToNull"/>
+        <property name="Password" value="123"/>
+        <property name="URL" value="jdbc:mysql://localhost:3306/psicologia?zeroDateTimeBehavior=convertToNull [root on Default schema]"/>
         <property name="driverClass" value="com.mysql.jdbc.Driver"/>
     </jdbc-connection-pool>
     <jdbc-resource enabled="true" jndi-name="java:app/jdbc/psicologiabd" object-type="user" pool-name="mysql_psicologiabd_rootPool"/>
